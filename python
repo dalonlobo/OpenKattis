@@ -1,0 +1,43 @@
+def foo 3
+calc foo + bar =
+def bar 7
+def programming 10
+calc foo + bar =
+def is 4
+def fun 8
+calc programming - is + fun =
+def fun 1
+calc programming - is + fun =
+clear
+#!/usr/bin/python3
+import sys
+
+vars = {}
+keys = {}
+
+for line in sys.stdin:
+    ip = sys.stdin.readline().strip()
+    cmd = ip.split()[0]
+    if cmd == "clear":
+        del keys
+        del vars
+        keys, vars = {}, {}
+    elif cmd == "def":
+        _, var, val = ip.split()
+        vars[var] = int(val)
+        keys[int(val)] = var
+    elif cmd == "calc":
+        vals = ip.split()
+        result = 0
+        sign = "+"
+        try:
+            for val in vals[1:]:
+                if val == "=":
+                    break
+                elif val in ["+", "-"]:
+                    sign = val
+                else:
+                    result = eval(f"{result}{sign}{vars[val]}")
+            print(" ".join(vals[1:] + [keys[result]]))
+        except KeyError:
+            print(" ".join(vals[1:] + ["unknown"]))
